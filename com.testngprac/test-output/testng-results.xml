@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2024-04-23T12:25:28 IST" name="Default suite" finished-at="2024-04-23T12:25:36 IST" duration-ms="7972">
+    <groups>
+    </groups>
+    <test started-at="2024-04-23T12:25:28 IST" name="Default test" finished-at="2024-04-23T12:25:36 IST" duration-ms="7972">
+      <class name="com.makemytrip.Login">
+        <test-method is-config="true" signature="getBrowserName()[pri:0, instance:com.makemytrip.Login@663c9e7a]" started-at="2024-04-23T12:25:28 IST" name="getBrowserName" finished-at="2024-04-23T12:25:32 IST" duration-ms="4112" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getBrowserName -->
+        <test-method signature="Url()[pri:0, instance:com.makemytrip.Login@663c9e7a]" started-at="2024-04-23T12:25:32 IST" name="Url" finished-at="2024-04-23T12:25:36 IST" duration-ms="3521" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Url -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.makemytrip.Login@663c9e7a]" started-at="2024-04-23T12:25:36 IST" name="tearDown" finished-at="2024-04-23T12:25:36 IST" duration-ms="273" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.makemytrip.Login -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
