@@ -37,6 +37,7 @@ public class BaseClass {
 		options.addArguments("--remote-allow-origins=*");
 		options.addArguments("--incognito");
         driver=new ChromeDriver(options);
+        driver.manage().window().maximize();
         
 	}
 	
