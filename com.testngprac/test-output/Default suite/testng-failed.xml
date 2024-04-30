@@ -5,7 +5,7 @@
     <classes>
       <class name="com.makemytrip.FlightBooking">
         <methods>
-          <include name="removeCookies"/>
+          <include name="selectTripType"/>
           <include name="tearDown"/>
           <include name="getBrowserName"/>
         </methods>
