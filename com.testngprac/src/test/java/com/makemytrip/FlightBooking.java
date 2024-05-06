@@ -48,11 +48,11 @@ public class FlightBooking extends BaseClass{
 	@Test(priority=2)
 	public void removePopups(){
 		wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-		WebElement nokiddingSale_popup=wait.until(ExpectedConditions.visibilityOfElementLocated(noKiddingSalePopup));
-		driver.switchTo().frame(nokiddingSale_popup);
-		WebElement noKidding_closebtn=wait.until(ExpectedConditions.visibilityOfElementLocated(noKiddingSaleCloseBtn));
-		noKidding_closebtn.click();
-		driver.switchTo().defaultContent();
+//		WebElement nokiddingSale_popup=wait.until(ExpectedConditions.visibilityOfElementLocated(noKiddingSalePopup));
+//		driver.switchTo().frame(nokiddingSale_popup);
+//		WebElement noKidding_closebtn=wait.until(ExpectedConditions.visibilityOfElementLocated(noKiddingSaleCloseBtn));
+//		noKidding_closebtn.click();
+//		driver.switchTo().defaultContent();
 		WebElement login_closebtn=wait.until(ExpectedConditions.visibilityOfElementLocated(loginCloseBtn));
 		login_closebtn.click();
 		
@@ -71,13 +71,13 @@ public class FlightBooking extends BaseClass{
 	}
 	
 	@Test(priority=5)
-	public void fromCity() {
+	public void fromCity() throws InterruptedException {
 		WebElement from_city=driver.findElement(fromCity);
 		from_city.click();
-		driver.findElement(By.xpath("//input[@class='react-autosuggest__input react-autosuggest__input--open']")).sendKeys("Bengaluru");
-		driver.findElement(By.xpath("//span[text()='Bengaluru']//ancestor::li")).click();
+//		driver.findElement(By.xpath("//input[@id='fromCity']")).click();
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//input[contains(@class, 'react-autosuggest__input react-autosuggest__')]")).sendKeys("Bengaluru");
+		driver.findElement(By.xpath("//li[contains(@class, 'react-autosuggest__suggestion react-autosuggest__suggestion')]//span[text()='Bengaluru']")).click();
 	}
-	
-	
 
 }

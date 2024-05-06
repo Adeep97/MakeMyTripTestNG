@@ -5,9 +5,11 @@
     <classes>
       <class name="com.makemytrip.FlightBooking">
         <methods>
+          <include name="selectTripType"/>
           <include name="waitTime"/>
           <include name="fromCity"/>
           <include name="tearDown"/>
+          <include name="removePopups"/>
           <include name="getBrowserName"/>
         </methods>
       </class> <!-- com.makemytrip.FlightBooking -->
