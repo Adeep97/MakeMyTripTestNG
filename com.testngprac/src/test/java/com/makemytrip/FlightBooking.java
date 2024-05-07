@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,6 +28,10 @@ public class FlightBooking extends BaseClass{
 	By flightTab= By.xpath("//ul[@class='makeFlex font12 headerIconsGap']//span[text()='Flights']//ancestor::li[@class='menu_Flights']");
 	By oneWay= By.xpath("//div[contains(@class, 'makeFlex')]//li[text()='One Way']");
 	By fromCity =By.xpath("//input[@id='fromCity']/../..");
+	By fromCityInput = By.xpath("//input[contains(@class, 'react-autosuggest__input react-autosuggest__')]");
+	By bangaloreSuggest = By.xpath("//li[contains(@class, 'react-autosuggest__suggestion react-autosuggest__suggestion')]//span[text()='Bengaluru']");
+	
+	
 	
 //	For debugging
 	@AfterMethod
@@ -45,39 +50,59 @@ public class FlightBooking extends BaseClass{
 		System.out.println("testPassed");
 	}
 	
-	@Test(priority=2)
+	@Test(priority=2, dependsOnMethods = {"urlNavigation"})
 	public void removePopups(){
-		wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-//		WebElement nokiddingSale_popup=wait.until(ExpectedConditions.visibilityOfElementLocated(noKiddingSalePopup));
-//		driver.switchTo().frame(nokiddingSale_popup);
-//		WebElement noKidding_closebtn=wait.until(ExpectedConditions.visibilityOfElementLocated(noKiddingSaleCloseBtn));
-//		noKidding_closebtn.click();
-//		driver.switchTo().defaultContent();
+		wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		
+		WebElement nokiddingSale_popup=null;
+		try {
+		nokiddingSale_popup = wait.until(ExpectedConditions.visibilityOfElementLocated(noKiddingSalePopup));
+		WebElement noKidding_closebtn = null;
+			try {
+			    noKidding_closebtn = wait.until(ExpectedConditions.visibilityOfElementLocated(noKiddingSaleCloseBtn));
+			    if(noKidding_closebtn.isDisplayed()){	
+			    driver.switchTo().frame(nokiddingSale_popup);
+			    noKidding_closebtn.click();
+			    }
+			} catch (TimeoutException e) {
+			    System.out.println("Close button not found or not displayed");
+			    e.printStackTrace();
+			} 
+		}catch(TimeoutException e) {
+			System.out.println("Frame not found or not displayed");
+		    e.printStackTrace();
+		}
+		finally {
+		     driver.switchTo().defaultContent();
+		}
 		WebElement login_closebtn=wait.until(ExpectedConditions.visibilityOfElementLocated(loginCloseBtn));
 		login_closebtn.click();
 		
 	}
 	
-	@Test(priority=3)
+	@Test(priority=3, dependsOnMethods = {"removePopups"})
 	public void flightsTab() {
 		WebElement flight_tab=wait.until(ExpectedConditions.visibilityOfElementLocated(flightTab));
 		flight_tab.click();
 	}
 	
-	@Test(priority=4)
+	@Test(priority=4, dependsOnMethods = {"flightsTab"})
 	public void selectTripType() {
 		WebElement one_way=wait.until(ExpectedConditions.visibilityOfElementLocated(oneWay));
 		one_way.click();
 	}
 	
-	@Test(priority=5)
+	@Test(priority=5, dependsOnMethods = {"selectTripType"})
 	public void fromCity() throws InterruptedException {
 		WebElement from_city=driver.findElement(fromCity);
 		from_city.click();
-//		driver.findElement(By.xpath("//input[@id='fromCity']")).click();
 		Thread.sleep(3000);
-		driver.findElement(By.xpath("//input[contains(@class, 'react-autosuggest__input react-autosuggest__')]")).sendKeys("Bengaluru");
-		driver.findElement(By.xpath("//li[contains(@class, 'react-autosuggest__suggestion react-autosuggest__suggestion')]//span[text()='Bengaluru']")).click();
+		WebElement from_cityInput=driver.findElement(fromCityInput);
+		from_cityInput.sendKeys("Bengaluru");
+		Thread.sleep(3000);
+		WebElement bangalore_suggest=driver.findElement(bangaloreSuggest);
+		bangalore_suggest.click();
+		
 	}
 
 }

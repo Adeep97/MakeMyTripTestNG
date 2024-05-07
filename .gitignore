@@ -1,2 +1,7 @@
-./.metadata/
-com.testngprac/test-output
+/.metadata/
+./com.testngprac/test-output/
+/com.testngprac/test-output/*
+!/test-output/*
+!/test-output/
+./test-output/*
+./test-output/
