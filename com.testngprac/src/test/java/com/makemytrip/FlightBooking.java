@@ -29,8 +29,9 @@ public class FlightBooking extends BaseClass{
 	By oneWay= By.xpath("//div[contains(@class, 'makeFlex')]//li[text()='One Way']");
 	By fromCity =By.xpath("//input[@id='fromCity']/../..");
 	By fromCityInput = By.xpath("//input[contains(@class, 'react-autosuggest__input react-autosuggest__')]");
-	By bangaloreSuggest = By.xpath("//li[contains(@class, 'react-autosuggest__suggestion react-autosuggest__suggestion')]//span[text()='Bengaluru']");
-	
+	By bangaloreSuggest = By.xpath("//li[contains(@class, 'react-autosuggest__suggestion')]//span[text()='Bengaluru']");
+	By toCity=By.xpath("//div[contains(@class, 'flt_fsw_inputBox searchToCity')]");
+	By mumbaiSuggest = By.xpath("//li[contains(@class, 'react-autosuggest__suggestion react-autosuggest__suggestion')]//span[text()='Mumbai']");
 	
 	
 //	For debugging
@@ -93,16 +94,31 @@ public class FlightBooking extends BaseClass{
 	}
 	
 	@Test(priority=5, dependsOnMethods = {"selectTripType"})
-	public void fromCity() throws InterruptedException {
+	public void fromCity(){
 		WebElement from_city=driver.findElement(fromCity);
 		from_city.click();
-		Thread.sleep(3000);
-		WebElement from_cityInput=driver.findElement(fromCityInput);
+		try {
+		WebElement from_cityInput=wait.until(ExpectedConditions.visibilityOfElementLocated(fromCityInput));
 		from_cityInput.sendKeys("Bengaluru");
-		Thread.sleep(3000);
+		}catch(TimeoutException e) {
+			e.printStackTrace();
+		}
 		WebElement bangalore_suggest=driver.findElement(bangaloreSuggest);
 		bangalore_suggest.click();
-		
 	}
+	
+	@Test(priority=6, dependsOnMethods= {"fromCity"})
+	public void toCity(){
+		WebElement to_city=driver.findElement(toCity);
+		to_city.click();
+		try {
+			WebElement from_cityInput=wait.until(ExpectedConditions.visibilityOfElementLocated(fromCityInput));
+			from_cityInput.sendKeys("Mumbai");
+			}catch(TimeoutException e) {
+				e.printStackTrace();
+			}
+			WebElement mumbai_suggest=driver.findElement(mumbaiSuggest);
+			mumbai_suggest.click();
+		}
 
 }
