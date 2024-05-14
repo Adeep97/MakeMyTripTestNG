@@ -1,6 +1,8 @@
 package com.makemytrip;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -22,6 +24,8 @@ import com.utilites.BaseClass;
 @Listeners(com.utilites.ListenersClass.class)
 public class FlightBooking extends BaseClass{
 	WebDriverWait wait;
+	static String formattedDepartureDate;
+	static String formattedDepartureDateDD;
 	
 	//Locators
 	By noKiddingSalePopup=By.id("webklipper-publisher-widget-container-notification-frame");
@@ -34,6 +38,11 @@ public class FlightBooking extends BaseClass{
 	By bangaloreSuggest = By.xpath("//li[contains(@class, 'react-autosuggest__suggestion')]//span[text()='Bengaluru']");
 	By toCity=By.xpath("//div[contains(@class, 'flt_fsw_inputBox searchToCity')]");
 	By mumbaiSuggest = By.xpath("//li[contains(@class, 'react-autosuggest__suggestion react-autosuggest__suggestion')]//span[text()='Mumbai']");
+	By departureDateField=By.xpath("//span[text()='Departure']/../..");
+	By departueDynamicDate=By.xpath("//p[text()='"+formattedDepartureDateDD+"']//ancestor::div[contains(@aria-label,"+"'"+formattedDepartureDate+"'"+")]and contains(@class, 'DayPicker-Day')");
+	By ReturnDateField=By.xpath("//span[text()='Return']/../..");
+	By studentFare=By.xpath("//div[@class='fareCardItem ']//div[text()='Student']");
+	By searchBtn=By.xpath("//a[text()='Search']");
 	
 	
 //	For debugging
@@ -105,7 +114,13 @@ public class FlightBooking extends BaseClass{
 		}catch(TimeoutException e) {
 			e.printStackTrace();
 		}
-		WebElement bangalore_suggest=driver.findElement(bangaloreSuggest);
+		WebElement bangalore_suggest=null;
+		try{
+			bangalore_suggest=wait.until(ExpectedConditions.visibilityOfElementLocated(bangaloreSuggest));
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		bangalore_suggest.click();
 	}
 	
@@ -119,8 +134,106 @@ public class FlightBooking extends BaseClass{
 			}catch(TimeoutException e) {
 				e.printStackTrace();
 			}
-			WebElement mumbai_suggest=driver.findElement(mumbaiSuggest);
+		WebElement mumbai_suggest=null;
+		try {
+			mumbai_suggest=wait.until(ExpectedConditions.visibilityOfElementLocated(mumbaiSuggest));
 			mumbai_suggest.click();
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
+		}
+	
+	@Test(priority=7, dependsOnMethods= {"toCity"})
+	public void departureDate() {
+//		try {
+//			WebElement departure_date=wait.until(ExpectedConditions.visibilityOfElementLocated(departureDateField));
+//			departure_date.click();
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
+		LocalDate date=LocalDate.now().plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+        
+        // Format the date to string with dd format
+        String formattedDepartureDate = date.format(formatter);
+		System.out.println(formattedDepartureDate);
+		
+        DateTimeFormatter formatterDD = DateTimeFormatter.ofPattern("dd");
+        
+        // Format the date to string with dd format
+        String formattedDepartureDateDD = date.format(formatterDD);
+		System.out.println(formattedDepartureDateDD);
+		
+		
+		try {
+			WebElement selectDepartureDate=wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[text()='"+formattedDepartureDateDD+"']//ancestor::div[contains(@aria-label,'"+formattedDepartureDate+"')and contains(@class, 'DayPicker-Day')]")));
+			System.out.println(selectDepartureDate);
+			selectDepartureDate.click();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test(priority=8, dependsOnMethods= {"departureDate()"})
+	public void returnDate() {
+		try {
+			WebElement selectReturnField=wait.until(ExpectedConditions.visibilityOfElementLocated(ReturnDateField));
+			selectReturnField.click();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		LocalDate date=LocalDate.now().plusDays(6);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+        
+        // Format the date to string with dd format
+        String formattedDepartureDate = date.format(formatter);
+		System.out.println(formattedDepartureDate);
+		
+        DateTimeFormatter formatterDD = DateTimeFormatter.ofPattern("dd");
+        
+        // Format the date to string with dd format
+        String formattedDepartureDateDD = date.format(formatterDD);
+		System.out.println(formattedDepartureDateDD);
+		
+		try {
+			WebElement selectreturnDate=wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[text()='"+formattedDepartureDateDD+"']//ancestor::div[contains(@aria-label,'"+formattedDepartureDate+"')and contains(@class, 'DayPicker-Day')]")));
+			System.out.println(selectreturnDate);
+			selectreturnDate.click();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test(priority=9, dependsOnMethods= {"returnDate()"})
+	public void selectFare() {
+		try {
+			WebElement student_Fare=wait.until(ExpectedConditions.visibilityOfElementLocated(studentFare));
+			student_Fare.click();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test(priority=10, dependsOnMethods= {"selectFare()"})
+	public void selectFares() { 
+		try {
+			WebElement search_btn=wait.until(ExpectedConditions.visibilityOfElementLocated(searchBtn));
+			search_btn.click();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			WebElement flightText=wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(), 'Flights from')]")));
+			Assert.assertTrue("flight text is displayed", flightText.isDisplayed());
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }
